@@ -1,12 +1,21 @@
 /*!chibi 3.0.7, Copyright 2012-2016 Kyle Barrow, released under MIT license */
-(function (module) {
+(function (root, factory) {
+    /**
+     * magic loader code - doesn't break other code that depends on the
+     * presence of the $ global even if chibi is loaded via require or whatever
+     */
     if (typeof define === "function" && define.amd) {
-        define(function () { return module });
+        define(function () {
+            return (root.$ = factory());
+        });
+
+    } else if (typeof module === "object" && module.exports) {
+        module.exports = (root.$ = factory());
+
     } else {
-        window.$ = module;
+        root.$ = module;
     }
-})({
-    chibi: function () {
+})(this, function () {
         'use strict';
 
         var readyfn = [],
@@ -700,7 +709,6 @@
             return cb;
         }
 
-        // Set Chibi's global namespace here ($)
-        w.$ = chibi;
+        return chibi;
     }
-});
+);
