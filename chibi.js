@@ -4,16 +4,16 @@
      * magic loader code - doesn't break other code that depends on the
      * presence of the $ global even if chibi is loaded via require or whatever
      */
-    if (typeof define === "function" && define.amd) {
+    var define = define || null;
+    var module = module || null;
+    if (define && typeof define === "function" && define.amd) {
         define(function () {
             return (root.$ = factory());
         });
-
-    } else if (typeof module === "object" && module.exports) {
+    } else if (module && typeof module === "object" && module.exports) {
         module.exports = (root.$ = factory());
-
     } else {
-        root.$ = module;
+        root.$ = factory();
     }
 })(this, function () {
         'use strict';
